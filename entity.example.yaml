@@ -1,0 +1,81 @@
+# ============================================================
+# 实体主数据表 · 示例（请复制为 entity.yaml 后改成你自己的）
+# 整理自 https://seogeo.cc/b2b-geo-entity-consistency-brand-factory-third-party
+#
+# 这是全站、全语言、全平台唯一的身份数据源。
+# 规则：品牌名与法定名在所有语言版本中保持原样，不意译、不音译；
+#       事实字段（地址、认证编号、成立年份）各语言完全相同，只有描述文字随语言变。
+# ============================================================
+
+# 全站唯一的实体 @id。同一实体的所有页面、所有语言都引用它，不要每页重写一份。
+entity_id: "https://www.example.com/#organization"
+
+# ---------- 第 1 层：法律主体 ----------
+legal:
+  legal_name: "Ningbo Shengwei Machinery Co., Ltd."   # 营业执照英文名，与报关一致
+  brand_name: "Sunwell"                               # 对外品牌名，legalName 与 name 分开写
+  founded: "2010"
+  vat_id: ""                                          # 有则填，如 VAT 号
+  iso6523_code: ""                                    # 如 DUNS 等，格式 1234:XXXX
+  registration_no: ""                                 # 统一社会信用代码（可选）
+  address:
+    street: "No. 88 Xingye Road"
+    locality: "Ningbo"
+    region: "Zhejiang"
+    postal_code: "315000"
+    country: "CN"
+
+# ---------- 第 2 层：品牌 ----------
+brand:
+  name: "Sunwell"
+  trademark_no: ""                                    # 商标号，有则填
+  logo: "https://www.example.com/logo.png"            # 至少 112×112 像素
+
+# ---------- 第 3 层：工厂身份 ----------
+# 贸易主体与工厂主体都要写清，并说明关系，避免 AI 判成「贸易商」
+factory:
+  is_manufacturer: true
+  relation: "Sunwell Trading Co. is the export entity of Shengwei Factory."
+  production_address: "No. 88 Xingye Road, Ningbo, Zhejiang, China"
+  area: "12000 m2"
+  production_lines: 4
+  monthly_capacity: "5000 units"
+
+# ---------- 第 4 层：资质认证 ----------
+# 只写能被发证机构官网查到的真实记录；过期证书不要放进结构化数据
+certifications:
+  - name: "ISO 9001:2015"
+    number: "CN19Q12345"
+    issuer: "SGS"
+    scope: "Design and manufacture of industrial valves"
+    valid_until: "2027-06-30"
+  # - name: "CE"
+  #   number: ""
+  #   issuer: ""
+  #   scope: ""
+  #   valid_until: ""
+
+# ---------- 第 5 层：联系方式 ----------
+contact:
+  website: "https://www.example.com"
+  email: "sales@example.com"
+  phone: "+86-574-8888-8888"
+  whatsapp: "+86-138-0000-0000"
+
+# sameAs：只放官方账号（LinkedIn 公司页、YouTube 频道、平台旗舰店）
+# 不要放转载、第三方文章、媒体提纲
+same_as:
+  - "https://www.linkedin.com/company/sunwell"
+  - "https://www.youtube.com/@sunwell"
+  - "https://example.en.alibaba.com"
+
+# ---------- 多语言 ----------
+# 事实字段共用上面同一份数据；这里只放各语言的描述性文字。
+# brand/legal_name/地址/认证编号在不同语言里保持原样，不翻译。
+languages:
+  en:
+    description: "Sunwell is a valve manufacturer in Ningbo, China, with 4 production lines."
+  de:
+    description: "Sunwell ist ein Ventilhersteller in Ningbo, China, mit 4 Produktionslinien."
+  es:
+    description: "Sunwell es un fabricante de válvulas en Ningbo, China, con 4 líneas de producción."
